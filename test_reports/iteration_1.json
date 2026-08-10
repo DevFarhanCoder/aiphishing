@@ -1,0 +1,39 @@
+{
+  "summary": "First-finish latency-sensitive testing pass on AI Phishing Attack Detector. Backend: 3 critical endpoints hit; core scoring, samples, health, empty-input, shortener and critical phishing flows all pass. Frontend: full E2E on sample load -> Analyze -> result render -> history/stats -> Clear -> Clear History all pass; UI shows risk gauge, CRITICAL level, verdict, indicators, URL analysis, AI explanation, recommendation.",
+  "tested_scope": ["backend", "frontend", "integration"],
+  "passed": [
+    "GET /api/ returns {status: ok}",
+    "GET /api/samples returns 5 samples with label/risk/text",
+    "POST /api/analyze critical bank phishing -> score=100, level=Critical, verdict='Highly Dangerous - do not interact', 9 indicators, 1 url_finding with risk=High + suspicious_tld=true, ai_explanation non-empty, recommendation mentions not clicking/sharing",
+    "POST /api/analyze safe appointment message -> score=0, level=Safe, 0 indicators, 0 url_findings",
+    "POST /api/analyze with http://bit.ly/xyz123 -> shortener=true detected",
+    "POST /api/analyze with empty string -> 422 pydantic validation (4xx); whitespace-only -> 400 with 'Please enter a message to analyze.'",
+    "Frontend loads at REACT_APP_BACKEND_URL, header 'AI Phishing Attack Detector' present, message-input/sample-select/analyze-btn visible",
+    "Sample dropdown populates textarea (229 chars) after selecting 'High-Risk (Bank Phishing)'",
+    "Analyze on critical sample renders risk-score=100%, risk-level=CRITICAL, verdict, indicators list, URL analysis card (screenshot verified), AI explanation, recommendation",
+    "History card visible; stats update: total=1, phishing=1, safe=0, avg=100% after single critical analysis",
+    "Clear button empties textarea and hides result panel",
+    "Clear History button resets stat-total to 0"
+  ],
+  "failed": [
+    {
+      "area": "backend scoring (detector.py/scoring.py)",
+      "issue": "Medium-risk FedEx delivery scam ('Your FedEx package delivery could not be completed, click http://fedex-redelivery.click/update') scores only 18 -> 'Safe'. Spec requires >= Low Risk (score >= 21).",
+      "evidence": "POST /api/analyze -> {risk_score:18, risk_level:'Safe'}. This is also the medium sample bundled in /api/samples labeled 'Medium-Risk (Delivery Scam)', so users who load this sample and click Analyze will see 'Safe' which contradicts the sample label.",
+      "priority": "MEDIUM"
+    },
+    {
+      "area": "backend URL extraction",
+      "issue": "Bare shortener tokens without scheme (e.g. 'bit.ly/xyz' without http://) are not extracted -> shortener heuristic is missed for scheme-less shorteners. Works fine when 'http://' prefix is present.",
+      "evidence": "POST /api/analyze {message:'click bit.ly/xyz'} -> url_findings=[]. With 'http://bit.ly/xyz123' -> shortener=true.",
+      "priority": "LOW"
+    }
+  ],
+  "action_items": [
+    "Boost scoring for delivery-impersonation + suspicious TLD combo (e.g. .click/.tk/.top) OR add impersonation/urgency weight to the FedEx sample text so the bundled 'Medium-Risk' sample lands in the Low/Medium band as labeled.",
+    "(Optional/LOW) Extend URL extraction regex in url_analyzer.py to match scheme-less short-domain patterns like 'bit.ly/xxx', 'tinyurl.com/xxx' so shortener detection also fires without http://."
+  ],
+  "success_rate": {"backend": "85%", "frontend": "100%"},
+  "retest_needed": true,
+  "full_testing_deferred": true
+}
