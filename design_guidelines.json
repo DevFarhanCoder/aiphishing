@@ -1,0 +1,118 @@
+{
+  "theme": "dark",
+  "archetype": "The \"Technical/Terminal\" Look + Cybersecurity Dark Dashboard",
+  "typography": {
+    "fonts": {
+      "headings": "'IBM Plex Sans', sans-serif",
+      "body": "'JetBrains Mono', monospace"
+    },
+    "rules": [
+      "Headings MUST use IBM Plex Sans, ensuring a stark, high-tech command center feel.",
+      "All data points, numbers, JSON output, URLs, and risk scores MUST use JetBrains Mono for legibility and technical aesthetic.",
+      "Use tight letter spacing (tracking-tight) for large headers.",
+      "Overlines/Labels (e.g., 'RISK LEVEL', 'VERDICT') MUST be uppercase, text-xs or text-sm, and tracking-[0.2em] with muted colors."
+    ]
+  },
+  "colors": {
+    "backgrounds": {
+      "main": "#050A14",
+      "card": "#0A1120",
+      "input": "#0F172A"
+    },
+    "accents": {
+      "primary": "#00F0FF",
+      "border": "rgba(30, 41, 59, 0.8)",
+      "glow": "rgba(0, 240, 255, 0.2)"
+    },
+    "risk_levels": {
+      "critical": "#FF3366",
+      "high": "#FF9900",
+      "medium": "#FFD700",
+      "low": "#00E5FF",
+      "safe": "#00E676"
+    },
+    "rules": [
+      "NEVER use generic gradients. Use flat dark backgrounds with glowing accent borders or subtle inner shadows.",
+      "Apply risk colors prominently: text, icon colors, border glow, or progress gauge fills.",
+      "Tint greys towards deep blue (Navy) rather than neutral black."
+    ]
+  },
+  "layouts": {
+    "grid_strategy": "High Density Grid (For Dashboards & Analytics)",
+    "structure": [
+      "Mobile-first: grid-cols-1.",
+      "Desktop: 12-column grid system with gap-6.",
+      "Left Column (Input/Controls): col-span-12 lg:col-span-4. Should be sticky if possible.",
+      "Right Column (Analysis/Stats): col-span-12 lg:col-span-8.",
+      "Stats Row: 4 cards, each col-span-12 sm:col-span-6 md:col-span-3.",
+      "Verdict/Gauge Card: Full width col-span-12.",
+      "Indicators & URLs: Two columns inside the right panel (col-span-6 each)."
+    ],
+    "spacing": [
+      "Use generous internal padding for cards: p-6 or p-8.",
+      "Maintain a cohesive gap-6 between grid items.",
+      "Cards must have rounded-md (6-8px) for a sharp, technical look—NOT overly rounded."
+    ]
+  },
+  "visual_enhancers": {
+    "surfaces": [
+      "Grid Borders: Expose the skeleton. Give cards 1px solid borders using the border color.",
+      "Glassmorphism: Use ONLY for the sticky top navigation (bg-background/80 backdrop-blur-xl border-b border-border). DO NOT use transparent backgrounds without blur.",
+      "Hover states: Slight lift (-translate-y-1) and subtle shadow glow based on accent color."
+    ],
+    "textures": [
+      "Add a subtle grid texture to the main background: linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px) with background-size: 30px 30px."
+    ],
+    "components": {
+      "gauge": "A large half-circle (180deg) SVG gauge or Recharts PieChart (startAngle 180, endAngle 0) to display the Risk Percentage. Fill color dynamically changes based on risk level.",
+      "buttons": "Primary buttons should have a neon tech vibe: sharp edges, cyan border, transparent background, cyan text, and solid cyan background on hover with black text.",
+      "textarea": "Dark, monospaced textarea with no outline, just a cyan ring on focus. Should feel like a terminal input."
+    }
+  },
+  "motion": {
+    "rules": [
+      "Use micro-interactions for feedback: subtle glows on hover, crisp transitions.",
+      "Entrance animations: Staggered fade-up for stats cards and list items.",
+      "Gauge Animation: The risk gauge must animate from 0 to the calculated score smoothly."
+    ]
+  },
+  "accessibility": {
+    "rules": [
+      "Ensure text contrast ratios meet WCAG AA.",
+      "All interactive elements MUST have focus:ring-2 focus:ring-cyan-500.",
+      "Add data-testid attributes to all interactive elements (buttons, inputs, key output text)."
+    ]
+  },
+  "media": {
+    "icons": "Use lucide-react. Prefer ShieldAlert, Target, ShieldCheck, Activity, Link, Server, History.",
+    "images_urls": []
+  },
+  "3d_libraries": {
+    "recommendation": "Use Recharts for any history trends if needed, but primarily use standard SVG or Shadcn/Radix components for the circular gauge. No heavy 3D required for this precise, data-heavy tool."
+  },
+  "component_name": "PhishingDashboard",
+  "instructions_to_main_agent": [
+    "1. Setup Google Fonts in public/index.html or import them in index.css: IBM Plex Sans and JetBrains Mono.",
+    "2. Modify tailwind.config.js to include custom colors inside the extend block: colors: { cyber: { bg: '#050A14', card: '#0A1120' }, risk: { critical: '#FF3366', high: '#FF9900', medium: '#FFD700', low: '#00E5FF', safe: '#00E676' } }.",
+    "3. Set the global body background to the dark navy cyber bg and text to light gray/white.",
+    "4. Force the application to render in Dark Mode (add 'dark' class to html/body or use standard Shadcn dark mode setups).",
+    "5. Use Shadcn components for the Select (Sample Loader), Textarea (Input), Table (History), and Cards.",
+    "6. Build a custom SVG-based Circular Gauge for the 'Phishing Risk Percentage' that maps the score (0-100) to an arc, color-coded by the risk level.",
+    "7. Implement LocalStorage for the 'Analysis History Table' and the Stats Dashboard. When the user analyzes a text, save the result.",
+    "8. Mock the AI reasoning / URL analysis in the code. Have a function that takes the input text, finds 'http' or keywords (urgent, password, bank), and returns a mocked structured JSON with Risk Score, Level, Verdict, Indicators, and AI Reasoning.",
+    "9. Add the grid pattern background to the root layout.",
+    "10. Ensure the entire layout is fully responsive, stacking cleanly on mobile."
+  ],
+  "UNIVERSAL GUIDELINES FOR MAIN AGENT": [
+    "You tend to converge toward generic outputs. Avoid this: make creative, distinctive frontends that surprise and delight.",
+    "Create depth through layered design elements with z-index hierarchy and glowing borders.",
+    "DO NOT apply universal transitions (e.g., transition: all). Add transitions to specific properties to avoid breaking transforms.",
+    "DO NOT center align the app container. Respect optical alignment and reading flow.",
+    "Always use modern button styles, specifically tactical/sharp tech styles for this dashboard.",
+    "NEVER use AI assistant Emoji characters (🤖🧠💭💡) for icons. Use lucide-react icons.",
+    "Every interaction needs micro-animations (hover states, focus rings).",
+    "Use generous spacing (p-6, p-8) inside cards to prevent cramped layouts.",
+    "Use sonner for toasts and notifications.",
+    "Prioritize using pre-existing components from src/components/ui when applicable."
+  ]
+}
