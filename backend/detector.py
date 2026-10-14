@@ -53,7 +53,9 @@ FINANCIAL_FRAUD_PATTERNS = [
 IMPERSONATION_PATTERNS = [
     (r"\b(bank\s*of|hdfc|icici|sbi|axis|kotak|chase|wells\s*fargo)\b", "Impersonation", "Claims to represent a bank", 5),
     (r"\b(irs|income\s*tax|hmrc|government|customs|police)\b", "Impersonation", "Claims to represent a government agency", 10),
-    (r"\b(fedex|dhl|ups|usps|india\s*post|blue\s*dart|delivery\s*(company|service))\b", "Impersonation", "Claims to be a delivery service", 6),
+    (r"\b(fedex|dhl|ups|usps|india\s*post|blue\s*dart|delivery\s*(company|service))\b", "Impersonation", "Claims to be a delivery service", 10),
+    (r"\b(package|parcel|shipment)\s+(delivery|could\s*not\s*be\s*(completed|delivered)|is\s*(on\s*hold|pending))\b", "Impersonation", "Uses package / delivery failure framing (common scam hook)", 8),
+    (r"\b(confirm|update|verify)\s+(your\s+)?(delivery|shipping|address|information|details)\b", "Impersonation", "Asks to confirm/update delivery or address info (delivery scam hook)", 8),
     (r"\b(microsoft|apple|google|amazon|netflix|paypal)\s*(support|team|security)\b", "Impersonation", "Claims to be tech-company support", 10),
     (r"\b(kyc|know\s*your\s*customer|re[- ]?verify)\b", "Impersonation", "Requests KYC re-verification (common scam vector)", 12),
     (r"\b(customer\s*(care|support|service))\s*(team|dept|department)?\b", "Impersonation", "Claims to be customer support", 4),
