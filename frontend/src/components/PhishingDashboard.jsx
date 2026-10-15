@@ -32,7 +32,7 @@ import {
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./ui/table";
 import RiskGauge from "./RiskGauge";
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+const BACKEND_URL = (process.env.REACT_APP_BACKEND_URL || "https://aiphishing.onrender.com").replace(/\/+$/, "");
 const API = `${BACKEND_URL}/api`;
 const HISTORY_KEY = "phish_detector_history_v1";
 const MAX_HISTORY = 25;
